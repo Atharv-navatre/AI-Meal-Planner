@@ -2,7 +2,7 @@
 
 This project is a meal planning app that generates personalized meal plans based on a user's caloric needs and food
 preferences.
-It uses Meta-Llama-3-70B to generate creative meal ideas using ingredients selected by the algorithm.
+It uses Llama-3 70B through Groq API to generate creative meal ideas using ingredients selected by the algorithm.
 
 ### Try the app [here](https://ai-meal-planner.streamlit.app)
 
@@ -14,41 +14,42 @@ It uses Meta-Llama-3-70B to generate creative meal ideas using ingredients selec
 
 ## Features
 
-- Calculation of daily calorie needs based on user inputs like age, height, weight, and gender
-- Selection of user food preferences and allergies/restrictions
-- Generation of meal plans for breakfast, lunch, and dinner within the target calorie ranges with food items from
-  different categories
-- Creative naming and description of meals using Meta-Llama-3-70B
+- Calculates daily calorie needs based on user inputs (age, height, weight, gender)
+- Supports both metric (kg, cm) and imperial (lb, ft + in) units
+- Allows selection of food preferences and allergies/restrictions
+- Generates personalized meal plans (breakfast, lunch, dinner) using knapsack algorithm to optimize calorie targets
+- Creates creative meal names and descriptions using Llama-3 70B AI model
+- Displays detailed nutritional information for each meal
 
 ## Technology
 
 - Python
-- Streamlit for app UI
+- Streamlit for web interface
 - Pandas for data manipulation
-- `Meta-Llama-3-70B` for AI text generation
+- Llama-3 70B via Groq API for AI text generation
+- Knapsack algorithm for optimal meal planning
 
 Add your API key to `.streamlit/secrets.toml`:
 
 ```bash
-openai_apikey="YOUR_API_KEY"
+GROQ_API_KEY="YOUR_API_KEY"
 ```
 
-## Random greedy algorithm
+## Meal Planning Algorithm
 
-- Calculating the target calories for breakfast, lunch, and dinner based on the user's BMR.
-- Randomly selecting a food group (e.g., fruits, proteins, etc.)
-- Randomly selecting a food item from that group.
-- Checking if adding that item would exceed the calorie target.
-- If not, add the item to the selected ingredients list.
-- Repeating steps 2 – 5 until the calories are within 10 of the target or all items are selected.
+The app uses the Knapsack algorithm to optimize meal planning:
 
-### The goal is to select a set of food items that maximize calories, while not exceeding the target calories. This is similar to the knapsack problem.
+1. Calculates target calories for breakfast (50%), lunch (33%), and dinner (17%) based on BMR
+2. For each meal:
+   - Considers all available food items as potential choices
+   - Optimizes selection to maximize calories while staying under target
+   - Uses dynamic programming to find the optimal combination of items
+   - Returns selected food items and total calories
+
+### The Knapsack algorithm ensures optimal food selection to meet calorie targets while considering all possible combinations.
 
 ---
 
-The app calculates the user's basal metabolic rate to determine their daily calorie needs. It then randomly selects
-ingredients from categorized food items to meet the calorie targets for each meal. The selected ingredients are passed
-to the Meta-Llama-3-70B to generate creative names and descriptions for the meals.
+The app calculates the user's basal metabolic rate (BMR) to determine daily calorie needs. It then uses the Knapsack algorithm to select optimal food combinations for each meal. The selected ingredients are passed to the Llama-3 70B model via Groq API to generate creative meal names and descriptions.
 
-The project demonstrates an application of AI for personalized meal planning.
-It could be extended by adding user accounts, more food options, recipe instructions, etc.
+The project demonstrates practical application of AI and optimization algorithms for personalized meal planning. Future enhancements could include user accounts, expanded food database, detailed recipes, and meal prep instructions.
